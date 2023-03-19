@@ -14,11 +14,11 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
 //User registration
 const saveUser= async(req,res)=>{
     const {name,email,password}= req.body;
-    const auth = getAuth();
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 createUserWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     // Signed in 
@@ -39,7 +39,8 @@ createUserWithEmailAndPassword(auth, email, password)
 }
 
 const getUser = async(req,res)=>{
-    const auth=getAuth();
+  const app = firebase.initializeApp(firebaseConfig);
+  const auth = getAuth(app);
     signInWithEmailAndPassword(auth,req.body.email,req.body.password).then((userCredential)=>{
       const user=userCredential.user.uid;
       return res.status(200).json({
